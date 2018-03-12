@@ -1,3 +1,3 @@
 # zweb
 
-Java Jetty Velocity Hibernate H2 Reflections
+ZWeb Java Jetty Velocity Hibernate H2 Reflections
