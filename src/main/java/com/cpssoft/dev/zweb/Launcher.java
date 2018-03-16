@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -20,6 +19,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.session.DefaultSessionIdManager;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.hibernate.Session;
@@ -30,6 +31,7 @@ import org.reflections.util.ClasspathHelper;
 import com.cpssoft.dev.zweb.orm.BrandEntity;
 import com.cpssoft.dev.zweb.orm.CarEntity;
 import com.cpssoft.dev.zweb.type.CarType;
+import com.cpssoft.dev.zweb.util.SystemUtil;
 
 public class Launcher {
 
@@ -79,13 +81,13 @@ public class Launcher {
 
 		ResourceHandler resourceHandler = new ResourceHandler();
 		resourceHandler.setDirectoriesListed(true);
-		resourceHandler.setResourceBase(getClassPath() + "/static");
+		resourceHandler.setResourceBase(SystemUtil.getSourceFolder() + "/static");
 
 		ContextHandler resourceContext = new ContextHandler();
 		resourceContext.setContextPath("/static/*");
 		resourceContext.setHandler(resourceHandler);
 
-		ServletContextHandler servletContext = new ServletContextHandler();
+		ServletContextHandler servletContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		servletContext.setContextPath("/");
 		servletContext.addServlet(new ServletHolder(new ServletManager()), "/*");
 
@@ -93,6 +95,15 @@ public class Launcher {
 		contexts.setHandlers(new Handler[] { resourceContext, servletContext });
 
 		server.setHandler(contexts);
+		
+//		DefaultSessionIdManager hashSessionIdManager = new DefaultSessionIdManager();
+//		SessionHandler sessionHandler = new SessionHandler();
+//		SessionManager sessionManager = new HashSessionManager();
+//		sessionManager.setSessionIdManager(hashSessionIdManager);
+//		sessionHandler.setSessionManager(sessionManager);
+//		sessionHandler.setServer(server);
+//		server.setSessionIdManager(hashSessionIdManager);
+		
 		server.start();
 
 		// The use of server.join() the will make the current thread join and
@@ -107,11 +118,6 @@ public class Launcher {
 		// Desktop.getDesktop().isSupported(Action.BROWSE)) {
 		// Desktop.getDesktop().browse(new URI("http://127.0.0.1:8888"));
 		// }
-	}
-
-	private String getClassPath() {
-		URL url = ClasspathHelper.forJavaClassPath().iterator().next();
-		return url.toString();
 	}
 
 	public void printNetAddress() throws UnknownHostException, SocketException {
@@ -178,6 +184,7 @@ public class Launcher {
 
 		try {
 			System.out.println("Java Class Path: " + ClasspathHelper.forJavaClassPath());
+			System.out.println("Source Folder: " + SystemUtil.getSourceFolder());
 
 			Launcher launcher = new Launcher();
 			// launcher.testDatabase();

@@ -1,4 +1,4 @@
-package com.cpssoft.dev.zweb;
+package com.cpssoft.dev.zweb.action;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.JsonObject;
 
@@ -15,7 +16,16 @@ public class LoginAction {
 	public HttpServletResponse response;
 
 	public void login() {
-		writeResponse("Hello");
+		HttpSession session = request.getSession();
+
+		Long counter = (Long) session.getAttribute("counter");
+		if (counter == null)
+			counter = 0L;
+		counter++;
+
+		session.setAttribute("counter", counter);
+
+		writeResponse("<input name=\"username\"><input type=\"password\" name=\"pass\">");
 	}
 
 	public void loginSubmit() {
@@ -35,7 +45,11 @@ public class LoginAction {
 
 		writeResponse(resp);
 	}
-	
+
+	public void loginRedirect() {
+		sendRedirect("/static/favicon.ico");
+	}
+
 	protected void writeResponse(String html) {
 		try {
 			response.setContentType("text/html");
@@ -51,6 +65,14 @@ public class LoginAction {
 			response.setContentType("application/json");
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.getWriter().println(json.toString());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected void sendRedirect(String location) {
+		try {
+			response.sendRedirect(location);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

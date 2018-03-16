@@ -1,6 +1,12 @@
 package com.cpssoft.dev.zweb.util;
 
+import java.net.URL;
+
+import org.reflections.util.ClasspathHelper;
+
 public class SystemUtil {
+
+	private static String classPath = null;
 
 	public static String getOperatingSystem() {
 		String os = System.getProperty("os.name").toLowerCase();
@@ -25,9 +31,21 @@ public class SystemUtil {
 		if (!isWindows()) {
 			return "";
 		}
-		
+
 		// return System.getenv("APPDATA");
 		return System.getProperty("user.home") + "\\Local Settings\\ApplicationData";
+	}
+
+	public static String getSourceFolder() {
+		if (classPath == null) {
+			URL url = ClasspathHelper.forJavaClassPath().iterator().next();
+			classPath = url.toString();
+			if (classPath.startsWith("file:")) {
+				classPath = classPath.substring(5);
+			}
+		}
+		
+		return classPath;
 	}
 
 }
