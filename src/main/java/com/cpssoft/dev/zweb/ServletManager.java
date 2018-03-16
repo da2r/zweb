@@ -37,9 +37,9 @@ public class ServletManager extends HttpServlet {
 			action.request = request;
 			action.response = response;
 
-			 action.login();
+			action.login();
 			// action.loginSubmit();
-//			action.loginRedirect();
+			// action.loginRedirect();
 		} else if ("/favicon.ico".equals(requestURI)) {
 			writeFavicon(response);
 		} else {
