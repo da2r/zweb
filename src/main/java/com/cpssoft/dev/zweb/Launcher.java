@@ -1,13 +1,11 @@
 package com.cpssoft.dev.zweb;
 
-import java.awt.Desktop;
-import java.awt.Desktop.Action;
 import java.io.File;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.URI;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -17,8 +15,13 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -72,41 +75,43 @@ public class Launcher {
 	}
 
 	public void startWebServer() throws Exception {
-		// Create a basic jetty server object that will listen on port 8080.
-		// Note that if you set this to port 0 then a randomly available port
-		// will be assigned that you can either look in the logs for the port,
-		// or programmatically obtain it for use in test cases.
 		server = new Server(8888);
 
-		// The ServletHandler is a dead simple way to create a context handler
-		// that is backed by an instance of a Servlet.
-		// This handler then needs to be registered with the Server object.
-		ServletHandler handler = new ServletHandler();
-		server.setHandler(handler);
+		ResourceHandler resourceHandler = new ResourceHandler();
+		resourceHandler.setDirectoriesListed(true);
+		resourceHandler.setResourceBase(getClassPath() + "/static");
 
-		// Passing in the class for the Servlet allows jetty to instantiate an
-		// instance of that Servlet and mount it on a given context path.
+		ContextHandler resourceContext = new ContextHandler();
+		resourceContext.setContextPath("/static/*");
+		resourceContext.setHandler(resourceHandler);
 
-		// IMPORTANT:
-		// This is a raw Servlet, not a Servlet that has been configured
-		// through a web.xml @WebServlet annotation, or anything similar.
-		handler.addServletWithMapping(ServletManager.class, "/*");
+		ServletContextHandler servletContext = new ServletContextHandler();
+		servletContext.setContextPath("/");
+		servletContext.addServlet(new ServletHolder(new ServletManager()), "/*");
 
-		// Start things up!
+		ContextHandlerCollection contexts = new ContextHandlerCollection();
+		contexts.setHandlers(new Handler[] { resourceContext, servletContext });
+
+		server.setHandler(contexts);
 		server.start();
 
 		// The use of server.join() the will make the current thread join and
 		// wait until the server is done executing.
 		// See
 		// http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#join()
-		// server.join();
+		server.join();
 
-		// Stop the server
 		// server.stop();
 
-		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Action.BROWSE)) {
-			Desktop.getDesktop().browse(new URI("http://127.0.0.1:8888"));
-		}
+		// if (Desktop.isDesktopSupported() &&
+		// Desktop.getDesktop().isSupported(Action.BROWSE)) {
+		// Desktop.getDesktop().browse(new URI("http://127.0.0.1:8888"));
+		// }
+	}
+
+	private String getClassPath() {
+		URL url = ClasspathHelper.forJavaClassPath().iterator().next();
+		return url.toString();
 	}
 
 	public void printNetAddress() throws UnknownHostException, SocketException {
@@ -141,8 +146,7 @@ public class Launcher {
 	public void testVelocity() {
 		VelocityEngine velocityEngine = new VelocityEngine();
 		velocityEngine.setProperty("resource.loader", "classpath");
-		velocityEngine.setProperty("classpath.resource.loader.class",
-				ClasspathResourceLoader.class.getName());
+		velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 
 		velocityEngine.init();
 
@@ -169,7 +173,7 @@ public class Launcher {
 
 	public static void main(String[] args) {
 		System.out.println(Arrays.asList(args));
-		
+
 		System.out.println("Start Launcher");
 
 		try {
