@@ -1,20 +1,15 @@
 package com.cpssoft.dev.zweb.action;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.JsonObject;
 
-public class LoginAction {
+public class LoginAction extends BaseAction {
 
-	public HttpServletRequest request;
-	public HttpServletResponse response;
-
+	@Action(path = "login")
 	public void login() {
 		HttpSession session = request.getSession();
 
@@ -28,10 +23,11 @@ public class LoginAction {
 		writeResponse("<input name=\"username\"><input type=\"password\" name=\"pass\">");
 	}
 
+	@Action(path = "login-submit")
 	public void loginSubmit() {
-		System.out.println(request.getMethod());
-		System.out.println(request.getRequestURI());
-		System.out.println(request.getParameter("id"));
+		// System.out.println(request.getMethod());
+		// System.out.println(request.getRequestURI());
+		// System.out.println(request.getParameter("id"));
 
 		JsonObject resp = new JsonObject();
 		resp.addProperty("s", true);
@@ -46,36 +42,11 @@ public class LoginAction {
 		writeResponse(resp);
 	}
 
+	@Action(path = "login-redirect")
 	public void loginRedirect() {
 		sendRedirect("/static/favicon.ico");
 	}
 
-	protected void writeResponse(String html) {
-		try {
-			response.setContentType("text/html");
-			response.setStatus(HttpServletResponse.SC_OK);
-			response.getWriter().println(html);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected void writeResponse(JsonObject json) {
-		try {
-			response.setContentType("application/json");
-			response.setStatus(HttpServletResponse.SC_OK);
-			response.getWriter().println(json.toString());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected void sendRedirect(String location) {
-		try {
-			response.sendRedirect(location);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	
 
 }

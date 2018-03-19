@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="icon" href="../favicon.png">
+	<title>$!{action.pageTitle}</title>
+
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" >
+
+	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/font-awesome/4.5.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="/static/AdminLTE/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="/static/AdminLTE/plugins/datepicker/bootstrap-datepicker.min.css">
+	<link rel="stylesheet" href="/static/AdminLTE/plugins/datetimepicker/bootstrap-datetimepicker.css">
+
+	<link rel="stylesheet" href="/static/AdminLTE/css/skins/${action.pageSkin}.min.css">
+
+	<link rel="stylesheet" href="/static/vns.css?$!{buildVer}">
+</head>
+
+<body class="hold-transition ${action.pageSkin} sidebar-mini">
+	<div class="wrapper">
+
+		<header class="main-header">
+
+			<!-- Logo -->
+			<a href="$homeUrl" class="logo">
+				<span class="logo-mini"><b>$!{pageAppTitle}</b></span>
+				<span class="logo-lg"><b>$!{pageAppTitle}</b> $!{pageAppSubTitle}</span>
+			</a>
+
+			<!-- Header Navbar -->
+			<nav class="navbar navbar-static-top" role="navigation">
+				<!-- Sidebar toggle button-->
+				<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+					<span class="sr-only">Toggle navigation</span>
+				</a>
+				#if (${showRightMenu})
+				<!-- Navbar Right Menu -->
+				<div class="navbar-custom-menu">
+					<ul class="nav navbar-nav">
+						<!-- User Account Menu -->
+						<li class="dropdown user user-menu">
+							<!-- Menu Toggle Button -->
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<!-- The user image in the navbar-->
+								<img src="$!{profilePictureUrl}" class="user-image" alt="User Image">
+								<!-- hidden-xs hides the username on small devices so only the image appears. -->
+								<span class="hidden-xs">$!{nickname}</span>
+							</a>
+							<ul class="dropdown-menu">
+								<!-- The user image in the menu -->
+								<li class="user-header">
+									<img src="$!{profilePictureUrl}" class="img-circle" alt="User Image">
+									<p>
+										$!{username}
+										<small>$!{fullName}</small>
+									</p>
+								</li>
+								<!-- Menu Body -->
+								<li class="user-body" style="display: none;">
+								</li>
+								<!-- Menu Footer-->
+								<li class="user-footer">
+									#if (${canChangePassword})
+									<div class="pull-left">
+										<a href="$!{changePasswordUrl}" class="btn btn-default btn-flat">Ganti Password</a>
+									</div>
+									#else
+									<div class="pull-left">
+										<a href="$!{homeUrl}" class="btn btn-default btn-flat">Home</a>
+									</div>
+									#end
+									<div class="pull-right">
+										<a href="$!{logoutUrl}" class="btn btn-default btn-flat">Sign out</a>
+									</div>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				#end
+			</nav>
+		</header>
+		<!-- Left side column. contains the logo and sidebar -->
+		<aside class="main-sidebar">
+
+			<!-- sidebar: style can be found in sidebar.less -->
+			<section class="sidebar">
+
+				<!-- Sidebar user panel (optional) -->
+				<div class="user-panel">
+					<div class="pull-left image">
+						<img src="$!{profilePictureUrl}" class="img-circle" alt="User Image">
+					</div>
+					<div class="pull-left info">
+						<p>$!{nickname}</p>
+						<!-- Status -->
+						<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+					</div>
+				</div>
+
+				<!-- search form (Optional) -->
+				<form action="#" method="get" class="sidebar-form" style="display: none;">
+					<div class="input-group">
+						<input type="text" name="q" class="form-control" placeholder="Search...">
+						<span class="input-group-btn">
+							<button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+						</span>
+					</div>
+				</form>
+				<!-- /.search form -->
+
+				<!-- Sidebar Menu -->
+				<ul class="sidebar-menu">
+
+					#foreach ($menu in $menuDefinition)
+					<li class="$menu.css">
+						<a href="$menu.url">
+							<i class="fa $menu.icon"></i> 
+							<span>$menu.label</span>
+
+							#if ($menu.subMenu)
+							<i class="fa fa-angle-left pull-right"></i>
+							#end
+						</a>
+						#if ($menu.subMenu)
+						<ul class="treeview-menu">
+							#foreach ($sub in $menu.subMenu)
+							<li class="$sub.css">
+								<a href="$sub.url">$sub.label</a>
+							</li>
+							#end
+						</ul>
+						#end
+					</li>
+					#end
+				</ul><!-- /.sidebar-menu -->
+			</section>
+			<!-- /.sidebar -->
+		</aside>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper" style="display: none;">
+			#if($action.hasErrors())
+			<section class="content">
+				<div class="callout callout-danger">
+					<h4>Maaf Kami tidak bisa memproses halaman ini!</h4>
+					<p>Informasi tentang ini telah kami catat dan akan Kami tindaklajuti sesegera mungkin.</p>
+
+					#if( $actionErrors.size() > 0 )
+					#foreach( $msg in $actionErrors )
+					[$msg]<br />
+					#end
+					#end
+
+					<p>
+						<div data-bind="text: 'Address  : ' + window.location.href"></div>
+						<div data-bind="text: 'Referrer : ' + document.referrer"></div>
+					</p>
+				</div>
+			</section>
+			#else
+			<section class="content-header">
+				<h1>
+					#if($action.havePageIconClass) 
+					<i class="fa $action.pageIconClass"></i>
+					#end
+					$!action.pageHeader
+					<small>$!action.pageSubHeader</small>
+				</h1>
+				<ol class="breadcrumb">
+					<li><a href="$action.homeUrl"><i class="fa fa-home"></i> Home</a></li>
+					#foreach ($route in $breadcrumb)
+					<li><a href="$route.url">$route.label</a></li>
+					#end
+					<li class="active">$action.pageBreadcrumbLabel</li>
+				</ol>
+			</section>
+
+			${body}
+			#end
+
+
+		</div><!-- /.content-wrapper -->
+
+		
+	</div><!-- ./wrapper -->
+
+	#modalConfirmDanger()
+	#modalConfirmWarning()
+	#modalConfirmPrimary()
+	#modalConfirm()
+
+	#modalMessage()
+
+	<div id="loader-wrapper" style="display: none;">
+		<div id="loader">
+			<h1 class="text-center">Loading..</h1>
+		</div>
+	</div>  
+
+
+	<!-- REQUIRED JS SCRIPTS -->
+
+	<script src="/js/jquery/jquery-1.11.1.min.js"></script>
+	<script src="/js/knockout/knockout-3.4.0.js"></script>
+	<script src="/static/momentjs/moment.min.js?$!{buildVer}"></script>
+	<script src="/static/bootstrap/js/bootstrap.min.js?$!{buildVer}"></script>
+	<script src="/static/AdminLTE/js/app.min.js?$!{buildVer}"></script>
+	<script src="/static/AdminLTE/plugins/datepicker/bootstrap-datepicker.js?$!{buildVer}"></script>
+	<script src="/static/AdminLTE/plugins/datetimepicker/bootstrap-datetimepicker.js?$!{buildVer}"></script>
+	<script src="/static/AdminLTE/plugins/datetimepicker/knockout-bootstrap-datetimepicker.js?$!{buildVer}"></script>
+	<script src="/js/jquery/jquery.maskedinput.js?$!{buildVer}"></script>
+
+
+	<script src="/static/vns.js?$!{buildVer}"></script>
+	<script src="/static/model/BasePageModel.js?$!{buildVer}"></script>
+	<script src="/static/model/BasePageListModel.js?$!{buildVer}"></script>
+	<script src="/static/model/BasePageInnerDialogModel.js?$!{buildVer}"></script>
+	<script src="/static/model/BasePageDetailDialogModel.js?$!{buildVer}"></script>
+	#foreach ($lib in $pageJSLib)
+	<script src="$!{lib}?$!{buildVer}"></script>
+	#end
+	<script src="$!{pageJS}?$!{buildVer}"></script>
+
+	<script>
+	var sessionData = $!str.parseJson($!action.sessionData);
+	var contentData = $!str.parseJson($!action.contentData);
+
+	$('.content-wrapper').show();
+
+	if (window.PageModel) {
+		var $contentEl = $('.content');
+
+		var model = new PageModel();
+		model._init();
+		model._beforeBind();
+		ko.applyBindings(model, $contentEl[0]);
+		model._afterBind();
+	}
+	</script>
+
+	<!-- </body></html> -->
+	
+</body>
+</html>
