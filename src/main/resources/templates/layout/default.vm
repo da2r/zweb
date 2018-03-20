@@ -9,16 +9,16 @@
 	<!-- Tell the browser to be responsive to screen width -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" >
 
-	<link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/static/font-awesome/4.5.0/css/font-awesome.min.css">
+	<!-- <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css"> -->
+	<!-- <link rel="stylesheet" href="/static/font-awesome/4.5.0/css/font-awesome.min.css"> -->
 
-	<link rel="stylesheet" href="/static/AdminLTE/css/AdminLTE.min.css">
-	<link rel="stylesheet" href="/static/AdminLTE/plugins/datepicker/bootstrap-datepicker.min.css">
-	<link rel="stylesheet" href="/static/AdminLTE/plugins/datetimepicker/bootstrap-datetimepicker.css">
+	<!-- <link rel="stylesheet" href="/static/AdminLTE/css/AdminLTE.min.css"> -->
+	<!-- <link rel="stylesheet" href="/static/AdminLTE/plugins/datepicker/bootstrap-datepicker.min.css"> -->
+	<!-- <link rel="stylesheet" href="/static/AdminLTE/plugins/datetimepicker/bootstrap-datetimepicker.css"> -->
 
-	<link rel="stylesheet" href="/static/AdminLTE/css/skins/${action.pageSkin}.min.css">
+	<!-- <link rel="stylesheet" href="/static/AdminLTE/css/skins/${action.pageSkin}.min.css"> -->
 
-	<link rel="stylesheet" href="/static/vns.css?$!{buildVer}">
+	<!-- <link rel="stylesheet" href="/static/vns.css?$!{buildVer}"> -->
 </head>
 
 <body class="hold-transition ${action.pageSkin} sidebar-mini">
@@ -206,26 +206,26 @@
 
 	<!-- REQUIRED JS SCRIPTS -->
 
-	<script src="/js/jquery/jquery-1.11.1.min.js"></script>
-	<script src="/js/knockout/knockout-3.4.0.js"></script>
-	<script src="/static/momentjs/moment.min.js?$!{buildVer}"></script>
-	<script src="/static/bootstrap/js/bootstrap.min.js?$!{buildVer}"></script>
-	<script src="/static/AdminLTE/js/app.min.js?$!{buildVer}"></script>
-	<script src="/static/AdminLTE/plugins/datepicker/bootstrap-datepicker.js?$!{buildVer}"></script>
-	<script src="/static/AdminLTE/plugins/datetimepicker/bootstrap-datetimepicker.js?$!{buildVer}"></script>
-	<script src="/static/AdminLTE/plugins/datetimepicker/knockout-bootstrap-datetimepicker.js?$!{buildVer}"></script>
-	<script src="/js/jquery/jquery.maskedinput.js?$!{buildVer}"></script>
+	<script src="/static/js/jquery-3.3.1.min.js"></script>
+	<!-- <script src="/js/knockout/knockout-3.4.0.js"></script> -->
+	<!-- <script src="/static/momentjs/moment.min.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/bootstrap/js/bootstrap.min.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/AdminLTE/js/app.min.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/AdminLTE/plugins/datepicker/bootstrap-datepicker.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/AdminLTE/plugins/datetimepicker/bootstrap-datetimepicker.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/AdminLTE/plugins/datetimepicker/knockout-bootstrap-datetimepicker.js?$!{buildVer}"></script> -->
+	<!-- <script src="/js/jquery/jquery.maskedinput.js?$!{buildVer}"></script> -->
 
 
-	<script src="/static/vns.js?$!{buildVer}"></script>
-	<script src="/static/model/BasePageModel.js?$!{buildVer}"></script>
-	<script src="/static/model/BasePageListModel.js?$!{buildVer}"></script>
-	<script src="/static/model/BasePageInnerDialogModel.js?$!{buildVer}"></script>
-	<script src="/static/model/BasePageDetailDialogModel.js?$!{buildVer}"></script>
+	<!-- <script src="/static/vns.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/model/BasePageModel.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/model/BasePageListModel.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/model/BasePageInnerDialogModel.js?$!{buildVer}"></script> -->
+	<!-- <script src="/static/model/BasePageDetailDialogModel.js?$!{buildVer}"></script> -->
 	#foreach ($lib in $pageJSLib)
 	<script src="$!{lib}?$!{buildVer}"></script>
 	#end
-	<script src="$!{pageJS}?$!{buildVer}"></script>
+	<!-- <script src="$!{pageJS}?$!{buildVer}"></script> -->
 
 	<script>
 	var sessionData = $!str.parseJson($!action.sessionData);

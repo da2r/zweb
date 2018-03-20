@@ -11,6 +11,15 @@ public class LoginAction extends BaseAction {
 
 	@Action(path = "login")
 	public void login() {
+		writeResponsePage();
+	}
+
+	@Action(path = "login-submit")
+	public void loginSubmit() {
+		// System.out.println(request.getMethod());
+		// System.out.println(request.getRequestURI());
+		// System.out.println(request.getParameter("id"));
+		
 		HttpSession session = request.getSession();
 
 		Long counter = (Long) session.getAttribute("counter");
@@ -19,15 +28,6 @@ public class LoginAction extends BaseAction {
 		counter++;
 
 		session.setAttribute("counter", counter);
-
-		writeResponse("<input name=\"username\"><input type=\"password\" name=\"pass\">");
-	}
-
-	@Action(path = "login-submit")
-	public void loginSubmit() {
-		// System.out.println(request.getMethod());
-		// System.out.println(request.getRequestURI());
-		// System.out.println(request.getParameter("id"));
 
 		JsonObject resp = new JsonObject();
 		resp.addProperty("s", true);
@@ -47,6 +47,9 @@ public class LoginAction extends BaseAction {
 		sendRedirect("/static/favicon.ico");
 	}
 
-	
+	@Override
+	protected boolean isRequireLoggedIn() {
+		return false;
+	}
 
 }

@@ -85,7 +85,8 @@ public class Launcher {
 		resourceContext.setContextPath("/static/*");
 		resourceContext.setHandler(resourceHandler);
 
-		ServletContextHandler servletContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		ServletContextHandler servletContext = new ServletContextHandler(
+				ServletContextHandler.SESSIONS);
 		servletContext.setContextPath("/");
 		servletContext.addServlet(new ServletHolder(new ActionServlet()), "/*");
 
@@ -93,15 +94,16 @@ public class Launcher {
 		contexts.setHandlers(new Handler[] { resourceContext, servletContext });
 
 		server.setHandler(contexts);
-		
-//		DefaultSessionIdManager hashSessionIdManager = new DefaultSessionIdManager();
-//		SessionHandler sessionHandler = new SessionHandler();
-//		SessionManager sessionManager = new HashSessionManager();
-//		sessionManager.setSessionIdManager(hashSessionIdManager);
-//		sessionHandler.setSessionManager(sessionManager);
-//		sessionHandler.setServer(server);
-//		server.setSessionIdManager(hashSessionIdManager);
-		
+
+		// DefaultSessionIdManager hashSessionIdManager = new
+		// DefaultSessionIdManager();
+		// SessionHandler sessionHandler = new SessionHandler();
+		// SessionManager sessionManager = new HashSessionManager();
+		// sessionManager.setSessionIdManager(hashSessionIdManager);
+		// sessionHandler.setSessionManager(sessionManager);
+		// sessionHandler.setServer(server);
+		// server.setSessionIdManager(hashSessionIdManager);
+
 		server.start();
 
 		// The use of server.join() the will make the current thread join and
@@ -150,7 +152,8 @@ public class Launcher {
 	public void testVelocity() {
 		VelocityEngine velocityEngine = new VelocityEngine();
 		velocityEngine.setProperty("resource.loader", "classpath");
-		velocityEngine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
+		velocityEngine.setProperty("classpath.resource.loader.class",
+				ClasspathResourceLoader.class.getName());
 
 		velocityEngine.init();
 
@@ -176,11 +179,9 @@ public class Launcher {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(Arrays.asList(args));
-
 		System.out.println("Start Launcher");
-
 		try {
+			System.out.println("Execution Arguments: " + Arrays.asList(args));
 			System.out.println("Java Class Path: " + ClasspathHelper.forJavaClassPath());
 			System.out.println("Source Folder: " + SystemUtil.getSourceFolder());
 

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.cpssoft.dev.zweb.action.ActionManager;
 import com.cpssoft.dev.zweb.action.ActionManager.Entry;
 import com.cpssoft.dev.zweb.action.BaseAction;
+import com.cpssoft.dev.zweb.action.ValidateResult;
+import com.cpssoft.dev.zweb.action.ValidateResultType;
 import com.cpssoft.dev.zweb.util.SystemUtil;
 
 public class ActionServlet extends HttpServlet {
@@ -31,7 +33,8 @@ public class ActionServlet extends HttpServlet {
 		execute(request, response);
 	}
 
-	private void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void execute(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		System.out.println(request.getMethod() + " " + request.getRequestURI());
 
 		String path = request.getRequestURI().substring(1);
@@ -51,7 +54,20 @@ public class ActionServlet extends HttpServlet {
 					BaseAction instance = actionEntry.clazz.newInstance();
 					instance.prepare(request, response);
 
-					actionEntry.method.invoke(instance);
+					ValidateResult validate = instance.validate();
+					if (validate == null) {
+						actionEntry.method.invoke(instance);
+					} else {
+						if (validate.type == ValidateResultType.ERROR) {
+							throw new RuntimeException(validate.message);
+						} else if (validate.type == ValidateResultType.REDIRECT) {
+							String redirectTarget = (String) validate.data;
+							response.sendRedirect(redirectTarget);
+						} else {
+							response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+						}
+					}
+
 				} catch (InvocationTargetException e) {
 					throw new RuntimeException(e);
 				} catch (IllegalArgumentException e) {

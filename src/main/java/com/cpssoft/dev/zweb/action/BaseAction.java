@@ -15,6 +15,8 @@ public class BaseAction {
 	public static final String DEFAULT_LAYOUT = "default";
 	public static final String NO_LAYOUT = "";
 
+	public static final String PATH_LOGIN = "login";
+
 	public HttpServletRequest request;
 	public HttpServletResponse response;
 
@@ -25,6 +27,24 @@ public class BaseAction {
 		this.response = response;
 
 		this.context = new VelocityContext();
+		this.context.put("action", this);
+	}
+
+	public ValidateResult validate() {
+		if (isRequireLoggedIn() && !isLoggedIn()) {
+			return new ValidateResult(ValidateResultType.REDIRECT, "Sesi Login telah berakhir",
+					PATH_LOGIN);
+		}
+
+		return null;
+	}
+
+	protected boolean isRequireLoggedIn() {
+		return true;
+	}
+
+	public boolean isLoggedIn() {
+		return request.getSession().getAttribute("username") != null;
 	}
 
 	protected void writeResponsePage() {
@@ -33,19 +53,16 @@ public class BaseAction {
 			path = "index";
 		}
 
-		writeHtmlResponse(DEFAULT_LAYOUT, path);
+		writeResponsePage(DEFAULT_LAYOUT, path);
 	}
 
-	protected void writeHtmlResponse(String layout, String path) {
+	protected void writeResponsePage(String layout, String path) {
 		String content = VelocityUtil.renderContent(path, context);
-		
-		if (layout == null || layout.equals(NO_LAYOUT)) {
+
+		if (layout != null && !layout.equals(NO_LAYOUT)) {
 			content = VelocityUtil.renderLayout(layout, content, context);
 		}
 
-		System.out.println("aa");
-		System.out.println(content);
-		
 		writeResponse(content);
 	}
 
