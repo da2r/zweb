@@ -34,7 +34,7 @@ import com.cpssoft.dev.zweb.type.CarType;
 import com.cpssoft.dev.zweb.util.SystemUtil;
 
 public class Launcher {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(Launcher.class);
 
 	private Server server;
@@ -45,7 +45,7 @@ public class Launcher {
 
 	public void testDatabase() {
 		String dbpath = "/Users/herman/Documents/AppData/zweb/zwebdb";
-		HibernateUtil.initSessionFactory(dbpath, null, null);
+		HibernateUtil.initSessionFactory(dbpath, "admin", "admin");
 		Session session = HibernateUtil.openSession();
 		try {
 			Transaction tx = session.getTransaction();
@@ -190,10 +190,10 @@ public class Launcher {
 			logger.info("Source Folder: " + SystemUtil.getSourceFolder());
 
 			Launcher launcher = new Launcher();
-			// launcher.testDatabase();
+			launcher.testDatabase();
 			// launcher.printNetAddress();
 			// launcher.testVelocity();
-			launcher.startWebServer();
+			// launcher.startWebServer();
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
