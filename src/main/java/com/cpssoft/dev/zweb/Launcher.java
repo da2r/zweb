@@ -25,6 +25,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.reflections.util.ClasspathHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.cpssoft.dev.zweb.orm.BrandEntity;
 import com.cpssoft.dev.zweb.orm.CarEntity;
@@ -32,6 +34,8 @@ import com.cpssoft.dev.zweb.type.CarType;
 import com.cpssoft.dev.zweb.util.SystemUtil;
 
 public class Launcher {
+	
+	private static Logger logger = LoggerFactory.getLogger(Launcher.class);
 
 	private Server server;
 
@@ -65,7 +69,7 @@ public class Launcher {
 			System.out.println(list);
 
 			Query<Long> sum = session.createQuery("select sum(price) from CarEntity", Long.class);
-			System.out.println("SUM : " + sum.uniqueResult());
+			logger.info("SUM : " + sum.uniqueResult());
 
 			tx.commit();
 		} finally {
@@ -158,12 +162,12 @@ public class Launcher {
 		velocityEngine.init();
 
 		File f = new File(".");
-		System.out.println("working path: " + f.getAbsolutePath());
+		logger.info("working path: " + f.getAbsolutePath());
 
-		System.out.println("velocity prop: ");
-		System.out.println(velocityEngine.getProperty("resource.loader"));
-		System.out.println(velocityEngine.getProperty("file.resource.loader.path"));
-		System.out.println(velocityEngine.getProperty("class.resource.loader.class"));
+		logger.info("velocity prop: ");
+		logger.info(velocityEngine.getProperty("resource.loader").toString());
+		logger.info(velocityEngine.getProperty("file.resource.loader.path").toString());
+		logger.info(velocityEngine.getProperty("class.resource.loader.class").toString());
 
 		Template t = velocityEngine.getTemplate("templates/index.vm");
 
@@ -179,11 +183,11 @@ public class Launcher {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Start Launcher");
+		logger.info("Start Launcher");
 		try {
-			System.out.println("Execution Arguments: " + Arrays.asList(args));
-			System.out.println("Java Class Path: " + ClasspathHelper.forJavaClassPath());
-			System.out.println("Source Folder: " + SystemUtil.getSourceFolder());
+			logger.info("Execution Arguments: " + Arrays.asList(args));
+			logger.info("Java Class Path: " + ClasspathHelper.forJavaClassPath());
+			logger.info("Source Folder: " + SystemUtil.getSourceFolder());
 
 			Launcher launcher = new Launcher();
 			// launcher.testDatabase();
@@ -195,7 +199,7 @@ public class Launcher {
 			throw new RuntimeException(e);
 		}
 
-		System.out.println("End Launcher");
+		logger.info("End Launcher");
 	}
 
 }
