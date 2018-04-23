@@ -30,7 +30,9 @@ import org.slf4j.LoggerFactory;
 
 import com.cpssoft.dev.zweb.orm.BrandEntity;
 import com.cpssoft.dev.zweb.orm.CarEntity;
+import com.cpssoft.dev.zweb.orm.UserEntity;
 import com.cpssoft.dev.zweb.type.CarType;
+import com.cpssoft.dev.zweb.util.HashUtil;
 import com.cpssoft.dev.zweb.util.SystemUtil;
 
 public class Launcher {
@@ -50,26 +52,14 @@ public class Launcher {
 		try {
 			Transaction tx = session.getTransaction();
 			tx.begin();
+			
+			String username = Long.toString(System.currentTimeMillis());
+			String password = "123456";
 
-			BrandEntity testing = new BrandEntity();
-			testing.setName("testing");
-			session.save(testing);
-
-			CarEntity car = new CarEntity();
-			car.setName("abc");
-			car.setPrice(20L);
-			car.setBrand(testing);
-			car.setType(CarType.SEDAN);
-			session.save(car);
-
-			Query<CarEntity> query = session.createQuery("from CarEntity", CarEntity.class);
-			List<CarEntity> list = query.getResultList();
-
-			System.out.println(list.size());
-			System.out.println(list);
-
-			Query<Long> sum = session.createQuery("select sum(price) from CarEntity", Long.class);
-			logger.info("SUM : " + sum.uniqueResult());
+			UserEntity user = new UserEntity();
+			user.setUsername(username);
+			user.setPasshash(HashUtil.hmacsha256(password, username));
+			session.save(user);
 
 			tx.commit();
 		} finally {

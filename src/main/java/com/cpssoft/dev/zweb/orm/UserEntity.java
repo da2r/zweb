@@ -2,23 +2,25 @@ package com.cpssoft.dev.zweb.orm;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 
-import com.cpssoft.dev.zweb.type.UserType;
+import com.cpssoft.dev.zweb.module.UserAccess;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(name = "unique_username", columnNames = "username"))
 public class UserEntity extends BaseEntity {
 
 	private String username;
 	private String passhash;
-	private UserType type;
+	private String accessData;
+
+	private UserAccess access = null;
 
 	@Id
 	@SequenceGenerator(name = "users_id", sequenceName = "users_id_seq")
@@ -26,7 +28,7 @@ public class UserEntity extends BaseEntity {
 	public Long getId() {
 		return id;
 	}
-	
+
 	@Column
 	public String getUsername() {
 		return username;
@@ -44,18 +46,26 @@ public class UserEntity extends BaseEntity {
 	public void setPasshash(String passhash) {
 		this.passhash = passhash;
 	}
-	
-	@Enumerated(EnumType.STRING)
-	public UserType getType() {
-		return type;
+
+	@Column
+	public String getAccessData() {
+		return accessData;
 	}
 
-	public void setType(UserType type) {
-		this.type = type;
+	public void setAccessData(String accessData) {
+		this.accessData = accessData;
+	}
+
+	@Transient
+	public UserAccess getAccess() {
+		if (access == null) {
+			access = new UserAccess(this);
+		}
+		return access;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("id: %d; username: %s; type: %s", id, username, type);
+		return String.format("id: %d; username: %s", id, username);
 	}
 }

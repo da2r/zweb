@@ -63,8 +63,7 @@ public class HibernateUtil {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put(Environment.DRIVER, "org.h2.Driver");
 		result.put(Environment.URL, "jdbc:h2:" + dbpath);
-		result.put(Environment.DIALECT, "org.hibernate.dialect.H2Dialect");
-		// result.put(Environment.DIALECT, "com.cpssoft.dev.zweb.CustomH2Dialect");
+		result.put(Environment.DIALECT, "com.cpssoft.dev.zweb.CustomH2Dialect");
 		result.put(Environment.SHOW_SQL, true);
 		result.put(Environment.FORMAT_SQL, true);
 		result.put(Environment.HBM2DDL_AUTO, "update");
