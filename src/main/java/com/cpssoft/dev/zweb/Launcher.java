@@ -8,7 +8,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -23,15 +22,11 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.reflections.util.ClasspathHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cpssoft.dev.zweb.orm.BrandEntity;
-import com.cpssoft.dev.zweb.orm.CarEntity;
 import com.cpssoft.dev.zweb.orm.UserEntity;
-import com.cpssoft.dev.zweb.type.CarType;
 import com.cpssoft.dev.zweb.util.HashUtil;
 import com.cpssoft.dev.zweb.util.SystemUtil;
 

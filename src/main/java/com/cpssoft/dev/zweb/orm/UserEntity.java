@@ -13,7 +13,7 @@ import javax.persistence.UniqueConstraint;
 import com.cpssoft.dev.zweb.module.UserAccess;
 
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(name = "unique_username", columnNames = "username"))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(name = "unique_users_username", columnNames = "username"))
 public class UserEntity extends BaseEntity {
 
 	private String username;
